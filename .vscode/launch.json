@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "al",
+            "request": "launch",
+            "name": "Your own server",
+            "server": "http://192.168.10.226:8080/POWERBI",
+            "serverInstance": "POWERBI",
+            "authentication": "UserPassword",
+            "tenant": "default",
+            "environmentType": "OnPrem",
+            "schemaUpdateMode": "Synchronize",
+            "breakOnError": true,
+            "launchBrowser": true,
+            "enableLongRunningSqlStatements": true,
+            "enableSqlInformationDebugger": true,
+            "port": 49049,
+            "debugServer": 49049
+        }
+    ]
+}

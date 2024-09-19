@@ -1,0 +1,28 @@
+{
+  "id": "97dcb0c2-10e0-4848-a938-474d3183d943",
+  "name": "DropBox",
+  "publisher": "Grupo Malla by Andreu",
+  "brief": "",
+  "description": "",
+  "version": "1.0.0.0",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "http://www.Malla.es",
+  "logo": "res/Grupo.png",
+  "target": "OnPrem",
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "24.0.0.0",
+  "application": "24.0.0.0",
+  "idRanges": [],
+   "preprocessorSymbols":["CLEAN24"],
+   "features": ["NoImplicitWith","TranslationFile","GenerateCaptions"],
+  "contextSensitiveHelpUrl": "http://www.malla.es/",
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "11.0"
+}

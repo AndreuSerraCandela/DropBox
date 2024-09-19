@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="en-US" original="DropBox">
+    <body>
+      <group id="body">
+        <trans-unit id="Codeunit 3588979080 - NamedType 3495774175" size-unit="char" translate="yes" xml:space="preserve">
+          <source>2/files/create_folder_v2</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - NamedType create_folder</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3588979080 - NamedType 944792227" size-unit="char" translate="yes" xml:space="preserve">
+          <source>2/files/delete_v2</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - NamedType delete</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3588979080 - NamedType 782405760" size-unit="char" translate="yes" xml:space="preserve">
+          <source>2/files/get_metadata</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - NamedType get_metadata</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3588979080 - NamedType 208252887" size-unit="char" translate="yes" xml:space="preserve">
+          <source>2/files/get_temporary_link</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - NamedType get_temporary_link</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3588979080 - NamedType 2872843041" size-unit="char" translate="yes" xml:space="preserve">
+          <source>authorization_code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - NamedType grant_type_authorization_code</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3588979080 - NamedType 3657903425" size-unit="char" translate="yes" xml:space="preserve">
+          <source>refresh_token</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - NamedType grant_type_refresh_token</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3588979080 - NamedType 1978679693" size-unit="char" translate="yes" xml:space="preserve">
+          <source>2/files/list_folder</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - NamedType list_folder</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3588979080 - NamedType 2750968735" size-unit="char" translate="yes" xml:space="preserve">
+          <source>/2/sharing/list_folder_members</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - NamedType list_folfer_members</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3588979080 - NamedType 1198507331" size-unit="char" translate="yes" xml:space="preserve">
+          <source>oauth2/token</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - NamedType oauth2_token</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3588979080 - NamedType 1196198469" size-unit="char" translate="yes" xml:space="preserve">
+          <source>2/sharing/share_folder</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - NamedType sharefolder</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3588979080 - NamedType 701918397" size-unit="char" translate="yes" xml:space="preserve">
+          <source>2/files/get_temporary_upload_link</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - NamedType Upload</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3588979080 - Method 2266206396 - NamedType 953671837" size-unit="char" translate="yes" xml:space="preserve">
+          <source>application/json</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - Method RestApi - NamedType MEDIA_TYPE</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3588979080 - Method 2629519733 - NamedType 953671837" size-unit="char" translate="yes" xml:space="preserve">
+          <source>application/json</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - Method RestApiToken - NamedType MEDIA_TYPE</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3588979080 - Method 2502473964 - NamedType 953671837" size-unit="char" translate="yes" xml:space="preserve">
+          <source>application/json</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - Method RestApiTokenOfset - NamedType MEDIA_TYPE</note>
+        </trans-unit>
+        <trans-unit id="Page 2429493653 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Dialogo Dropbox</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Dialogo Dropbox - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2429493653 - Control 3192175264 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Teclee fecha</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Dialogo Dropbox - Control Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2429493653 - Control 2688099599 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Teclee fecha</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Dialogo Dropbox - Control Date1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2429493653 - Control 472720858 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Teclee valor</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Dialogo Dropbox - Control Valor - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2429493653 - Control 443158777 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Teclee valor</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page Dialogo Dropbox - Control Valor1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1814822428 - Action 1345105413 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
+          <source>DropBox</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Action Acciones DropBox - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1814822428 - Action 3982329546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
+          <source>Borrar Carpeta</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Action Borrar Carpeta - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1814822428 - Action 2944983729 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
+          <source>Crea una carpeta en DropBox</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Action Crear Carpeta - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1814822428 - Action 2944983729 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
+          <source>Crear Carpeta</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Action Crear Carpeta - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1814822428 - Action 2640998947 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
+          <source>Crea permisos para la aplicación en DropBox</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Action Get Token DropBox - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1814822428 - Action 2640998947 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
+          <source>Optener Código DropBox</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Action Get Token DropBox - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1814822428 - Action 894327540 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
+          <source>Miembros Carpeta</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Action Miembros Carpeta - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1814822428 - Action 1171422281 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
+          <source>Subir archivo a una carpeta en DropBox</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Action Subir Arcivo - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1814822428 - Action 1171422281 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
+          <source>Subir Archivo</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Action Subir Arcivo - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1814822428 - Action 1798450662 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
+          <source>&amp;Dropbox</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Action &amp;Dropbox - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1814822428 - Control 1236917681 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
+          <source>Specifies the products or service being offered</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Control Token DorpBox - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1814822428 - Field 4106428545 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3469146285">
+          <source>Api Key</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CompanyInfoExt - Field Api Key - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1814822428 - Field 1607816002 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3469146285">
+          <source>Api Secret</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CompanyInfoExt - Field Api Secret - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1814822428 - Field 1009433558 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3469146285">
+          <source>Fecha Expiracion Token Dropbox</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CompanyInfoExt - Field Fecha Expiracion Token Dropbox - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1814822428 - Field 1513319962 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3469146285">
+          <source>Refresh Token</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CompanyInfoExt - Field Refresh Token - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1814822428 - Field 2623500553 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3469146285">
+          <source>Token Dropbox</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CompanyInfoExt - Field Token Dropbox - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1814822428 - Field 211956657 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3469146285">
+          <source>Url Api DropBox</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CompanyInfoExt - Field Url Api DropBox - Property Caption</note>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

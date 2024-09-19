@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "al",
+            "request": "launch",
+            "name": "Your own server",
+            "server": "http://192.168.10.192:8080/BC220",
+            "serverInstance": "BC220",
+            "authentication": "UserPassword",
+            "tenant": "default",
+            "environmentType": "OnPrem",
+            "schemaUpdateMode": "ForceSync",
+            "breakOnError": true,
+            "launchBrowser": true,
+            "enableLongRunningSqlStatements": true,
+            "enableSqlInformationDebugger": true,
+            "port": 7049,
+            "debugServer": 7049
+        }
+    ]
+}
