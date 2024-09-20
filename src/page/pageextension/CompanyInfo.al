@@ -97,6 +97,24 @@ pageextension 96000 "CompanyInfoExt" extends "Company Information"
                         DorpBox.DeleteFolder(Carpeta);
                     end;
                 }
+                action("Listar Carpeta")
+                {
+                    ApplicationArea = All;
+                    Image = ToggleBreakpoint;
+                    Caption = 'Listar Carpeta';
+                    ToolTip = 'Listar una carpeta de DropBox';
+                    trigger OnAction()
+                    var
+                        DorpBox: Codeunit "DropBox";
+                        Ventana: Page "Dialogo Dropbox";
+                        Carpeta: Text;
+                    begin
+                        Ventana.SetTexto('Nombre Carpeta');
+                        Ventana.RunModal();
+                        Ventana.GetTexto(Carpeta);
+                        DorpBox.ListFolder(Carpeta, true);
+                    end;
+                }
                 action("Subir Arcivo")
                 {
                     ApplicationArea = All;

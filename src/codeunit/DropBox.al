@@ -25,6 +25,7 @@ Codeunit 7001136 Dropbox
         JnodeProertiesToken: JsonToken;
         JsonProperties: JsonObject;
         JnodevsignToken: JsonToken;
+        Base64Txt: Text;
 
 
     trigger OnRun()
@@ -36,7 +37,7 @@ Codeunit 7001136 Dropbox
 
     end;
 
-    [ServiceEnabled]
+    //[ServiceEnabled]
     /// <summary>
     /// Token.
     /// </summary>
@@ -58,7 +59,7 @@ Codeunit 7001136 Dropbox
         exit(CompanyInfo.GetTokenDropbox());
     end;
 
-    procedure ListFolder(Carpeta: Text): Text
+    procedure ListFolder(Carpeta: Text; BajarFichero: Boolean): Text
     var
         Dropbox: Codeunit Dropbox;
         Ticket: Text;
@@ -76,8 +77,11 @@ Codeunit 7001136 Dropbox
         JEntryToken: JsonToken;
         JEntryTokens: JsonToken;
         Id: Text;
-        Files: Record "Name/Value Buffer";
+        tag: Text;
+        Files: Record "Name/Value Buffer" temporary;
         PFiles: Page "Name/Value Lookup";
+        UltimaBarra: Text;
+        barra: Integer;
     begin
         //https://api.dropboxapi.com/2/files/list_folder_v2
         Ticket := Dropbox.Token();
@@ -130,19 +134,46 @@ Codeunit 7001136 Dropbox
             JEntries := JTok.AsArray();
             foreach JEntryTokens in JEntries do begin
                 JEntry := JEntryTokens.AsObject();
-                // If JEntry.Get('.tag', JEntryToken) Then begin
-                //     If JEntryToken.AsValue().AsText() = 'folder' then begin
-                //     If JEntry.Get('name', JEntryToken) Then begin
-                //         Id := JEntryToken.AsValue().AsText();
-                //     end;
+                If JEntry.Get('.tag', JEntryToken) Then begin
+                    tag := JEntryToken.AsValue().AsText();
+                end;
                 // end;
                 if JEntry.Get('name', JEntryToken) then begin
-                    PFiles.AddItem(JEntryToken.AsValue().AsText(), '');
+                    if tag = 'folder' then
+                        PFiles.AddItem(JEntryToken.AsValue().AsText(), 'Carpeta')
+                    else
+                        PFiles.AddItem(JEntryToken.AsValue().AsText(), '');
                 end;
             end;
         end;
         Commit();
-        PFiles.RunModal();
+        PFiles.Navegar();
+        If PFiles.RunModal() in [Action::LookupOk, Action::OK] then begin
+            Files.Init();
+            PFiles.GetNombre(Files.Name, Files.Value);
+            If Files.Value = 'Carpeta' then begin
+                //Carpeta/Subcarpeta/Archivo
+                //Volver a la carpeta antertior
+                If Files.Name = 'Anterior' then begin
+                    Files.Name := '';
+                    If StrPos(Carpeta, '/') > 0 then begin
+                        repeat
+                            Barra += 1;
+
+                            UltimaBarra := CopyStr(Carpeta, barra);
+
+                        until StrPos(UltimaBarra, '/') = 0;
+                        Files.Name := CopyStr(Carpeta, 1, barra - 2);
+                        DropBox.ListFolder(Files.Name, BajarFichero);
+                    end;
+                end else
+                    DropBox.ListFolder(Carpeta + '/' + Files.Name, BajarFichero);
+            end else begin
+                exit(DowloadFileB64(Carpeta, Base64Txt, Files.Name, BajarFichero));
+            end;
+
+
+        end;
 
 
     end;
@@ -610,6 +641,79 @@ Codeunit 7001136 Dropbox
     end;
 
 
+    procedure DowloadFileB64(Carpeta: Text; Base64Data: Text; Filename: Text; BajarFichero: Boolean): Text
+    var
+        Inf: Record "Company Information";
+        RequestType: Option Get,patch,put,post,;
+        Parametros: Text;
+        User: Record "User Setup";
+        Employe: Record Employee;
+        UrlDropbox: Text;
+        Ticket: Text;
+        Dropbox: Codeunit Dropbox;
+        Url: Text;
+        Body: JsonObject;
+        comit_info: JsonObject;
+        Json: Text;
+
+        StatusInfo: JsonObject;
+        JTokenLink: JsonToken;
+        Respuesta: Text;
+        Id: Text;
+        DocumentStream: OutStream;
+        TempBlob: Codeunit "Temp Blob";
+        Int: Instream;
+        Bs64: Codeunit "Base64 Convert";
+        GeneralLedgerSetup: Record "General Ledger Setup";
+        OutStr: OutStream;
+    begin
+
+        Inf.Get;
+        Ticket := Dropbox.Token();
+        Url := Inf."Url Api DropBox" + get_temporary_link;
+        // {
+        //     "path": "/Matrices.png",
+        //}
+        Body.Add('path', '/' + Carpeta + '/' + FileName);
+        Body.WriteTo(Json);
+        Respuesta := RestApiToken(Url, Ticket, RequestType::post, Json);
+        StatusInfo.ReadFrom(Respuesta);
+        StatusInfo.WriteTo(Json);
+        //{
+        // "metadata": {
+        //     "name": "math",
+        //     "path_lower": "/homework/math",
+        //     "path_display": "/Homework/math",
+        //     "id": "id:W1FIDMoXTbgAAAAAAAAACQ"
+        // }
+        //}
+        //recuperar id
+        If StatusInfo.Get('link', JTokenLink) Then begin
+            Id := JTokenLink.AsValue().AsText();
+        end;
+        // Clear(Body);
+        // GeneralLedgerSetup.Get();
+        // Body.add('url', Id);
+        // Body.WriteTo(Json);
+        TempBlob.CreateInStream(Int);
+        //Json := RestApiOfset(GeneralLedgerSetup."Url Alfresco" + 'fetch', RequestType::Post, Json);
+        RestApiGetContentStream(Id, RequestType::Get, Int);
+        Base64Data := Bs64.ToBase64(Int);
+        //Base64Data := Copystr(Json, 2, Strlen(json) - 2);
+        If BajarFichero
+        then begin
+            // TempBlob.CreateOutStream(OutStr);
+            // Bs64.FromBase64(Base64Data, OutStr);
+            // TempBlob.CreateInStream(Int);
+            DownloadFromStream(Int, 'Guardar', 'C:\Temp', 'ALL Files (*.*)|*.*', Filename);
+
+
+        end;
+        exit(Base64Data);
+
+    end;
+
+
     procedure UploadFileB64(Carpeta: Text; Base64Data: InStream; Filename: Text): Text
     var
         Inf: Record "Company Information";
@@ -674,7 +778,7 @@ Codeunit 7001136 Dropbox
         Clear(Body);
         //Dococument Attach to base64
         //Base64Data := ConvertBase64StringToBinaryValue(Base64Data);
-        Respuesta := RestApiTokenOfset(Id, RequestType::post, Base64Data);
+        Respuesta := RestApiOfset(Id, RequestType::post, Base64Data);
         Clear(StatusInfo);
         StatusInfo.ReadFrom(Respuesta);
         StatusInfo.WriteTo(Json);
@@ -787,7 +891,7 @@ Codeunit 7001136 Dropbox
         HttpClient.DefaultRequestHeaders().Add('Authorization', AuthString);
     end;
 
-    procedure RestApiTokenOfset(url: Text; RequestType: Option Get,patch,put,post,delete; payload: instream): Text
+    procedure RestApiOfset(url: Text; RequestType: Option Get,patch,put,post,delete; payload: instream): Text
     var
         Ok: Boolean;
         Respuesta: Text;
@@ -798,7 +902,7 @@ Codeunit 7001136 Dropbox
         RequestMessage: HttpRequestMessage;
         ResponseText: Text;
         contentHeaders: HttpHeaders;
-        MEDIA_TYPE: Label 'application/json';
+    //MEDIA_TYPE: Label 'application/json';
     begin
         //url := GlSetup."Url" + url;
 
@@ -849,6 +953,61 @@ Codeunit 7001136 Dropbox
         exit(ResponseText);
 
     end;
+
+    procedure RestApiGetContentStream(url: Text; RequestType: Option Get,patch,put,post,delete; var payload: InStream)
+    var
+        Client: HttpClient;
+        RequestHeaders: HttpHeaders;
+        RequestContent: HttpContent;
+        ResponseMessage: HttpResponseMessage;
+        RequestMessage: HttpRequestMessage;
+        ResponseText: InStream;
+        contentHeaders: HttpHeaders;
+    begin
+        RequestHeaders := Client.DefaultRequestHeaders();
+        //RequestHeaders.Add('Authorization', CreateBasicAuthHeader(Username, Password));
+
+        case RequestType of
+            RequestType::Get:
+                Client.Get(URL, ResponseMessage);
+            RequestType::patch:
+                begin
+                    RequestContent.WriteFrom(payload);
+
+                    RequestContent.GetHeaders(contentHeaders);
+                    contentHeaders.Clear();
+                    contentHeaders.Add('Content-Type', 'application/json-patch+json');
+
+                    RequestMessage.Content := RequestContent;
+
+                    RequestMessage.SetRequestUri(URL);
+                    RequestMessage.Method := 'PATCH';
+
+                    client.Send(RequestMessage, ResponseMessage);
+                end;
+            RequestType::post:
+                begin
+                    RequestContent.WriteFrom(payload);
+
+                    RequestContent.GetHeaders(contentHeaders);
+                    contentHeaders.Clear();
+                    contentHeaders.Add('Content-Type', 'application/json');
+
+                    Client.Post(URL, RequestContent, ResponseMessage);
+                end;
+            RequestType::delete:
+                begin
+
+
+                    Client.Delete(URL, ResponseMessage);
+                end;
+        end;
+
+        ResponseMessage.Content().ReadAs(payload);
+        //exit(ResponseText);
+
+    end;
+
 
     /// <summary>
     /// RestApiToken.

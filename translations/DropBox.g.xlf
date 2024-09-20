@@ -68,11 +68,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - Method RestApiToken - NamedType MEDIA_TYPE</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3588979080 - Method 2502473964 - NamedType 953671837" size-unit="char" translate="yes" xml:space="preserve">
-          <source>application/json</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Dropbox - Method RestApiTokenOfset - NamedType MEDIA_TYPE</note>
-        </trans-unit>
         <trans-unit id="Page 2429493653 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Dialogo Dropbox</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -128,6 +123,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Action Get Token DropBox - Property Caption</note>
         </trans-unit>
+        <trans-unit id="PageExtension 1814822428 - Action 366208435 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
+          <source>Listar una carpeta de DropBox</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Action Listar Carpeta - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1814822428 - Action 366208435 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
+          <source>Listar Carpeta</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Action Listar Carpeta - Property Caption</note>
+        </trans-unit>
         <trans-unit id="PageExtension 1814822428 - Action 894327540 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3469146285">
           <source>Miembros Carpeta</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -152,6 +157,21 @@
           <source>Specifies the products or service being offered</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CompanyInfoExt - Control Token DorpBox - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 263532333 - Action 1702228118 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3175270987">
+          <source>Abrir Carpeta</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension LokupFile - Action Abrir Carpeta - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 263532333 - Action 277502140 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3175270987">
+          <source>Anterior</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension LokupFile - Action Anterior - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 263532333 - Action 3227287610 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3175270987">
+          <source>Descargar Archivo</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension LokupFile - Action Descargar Archivo - Property Caption</note>
         </trans-unit>
         <trans-unit id="TableExtension 1814822428 - Field 4106428545 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3469146285">
           <source>Api Key</source>
