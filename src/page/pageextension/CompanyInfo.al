@@ -62,45 +62,45 @@ pageextension 96000 "CompanyInfoExt" extends "Company Information"
                         DorpBox.ObtenerToken(CodeDropBox);
                     end;
                 }
-                action("Crear Carpeta")
-                {
-                    ApplicationArea = All;
-                    Image = ToggleBreakpoint;
-                    Caption = 'Crear Carpeta';
-                    ToolTip = 'Crea una carpeta en DropBox';
-                    trigger OnAction()
-                    var
-                        DorpBox: Codeunit "DropBox";
-                        Ventana: Page "Dialogo Dropbox";
-                        Carpeta: Text;
-                    begin
-                        Ventana.SetTexto('Nombre Carpeta');
-                        Ventana.RunModal();
-                        Ventana.GetTexto(Carpeta);
-                        DorpBox.CreateFolder(Carpeta);
-                    end;
-                }
-                action("Borrar Carpeta")
-                {
-                    ApplicationArea = All;
-                    Image = ToggleBreakpoint;
-                    Caption = 'Borrar Carpeta';
-                    trigger OnAction()
-                    var
-                        DorpBox: Codeunit "DropBox";
-                        Ventana: Page "Dialogo Dropbox";
-                        Carpeta: Text;
-                    begin
-                        Ventana.SetTexto('Nombre Carpeta');
-                        Ventana.RunModal();
-                        Ventana.GetTexto(Carpeta);
-                        DorpBox.DeleteFolder(Carpeta);
-                    end;
-                }
+                // action("Crear Carpeta")
+                // {
+                //     ApplicationArea = All;
+                //     Image = ToggleBreakpoint;
+                //     Caption = 'Crear Carpeta';
+                //     ToolTip = 'Crea una carpeta en DropBox';
+                //     trigger OnAction()
+                //     var
+                //         DorpBox: Codeunit "DropBox";
+                //         Ventana: Page "Dialogo Dropbox";
+                //         Carpeta: Text;
+                //     begin
+                //         Ventana.SetTexto('Nombre Carpeta');
+                //         Ventana.RunModal();
+                //         Ventana.GetTexto(Carpeta);
+                //         DorpBox.CreateFolder(Carpeta);
+                //     end;
+                // }
+                // action("Borrar Carpeta")
+                // {
+                //     ApplicationArea = All;
+                //     Image = ToggleBreakpoint;
+                //     Caption = 'Borrar Carpeta';
+                //     trigger OnAction()
+                //     var
+                //         DorpBox: Codeunit "DropBox";
+                //         Ventana: Page "Dialogo Dropbox";
+                //         Carpeta: Text;
+                //     begin
+                //         Ventana.SetTexto('Nombre Carpeta');
+                //         Ventana.RunModal();
+                //         Ventana.GetTexto(Carpeta);
+                //         DorpBox.DeleteFolder(Carpeta);
+                //     end;
+                // }
                 action("Listar Carpeta")
                 {
                     ApplicationArea = All;
-                    Image = ToggleBreakpoint;
+                    Image = ShowList;
                     Caption = 'Listar Carpeta';
                     ToolTip = 'Listar una carpeta de DropBox';
                     trigger OnAction()
@@ -108,37 +108,39 @@ pageextension 96000 "CompanyInfoExt" extends "Company Information"
                         DorpBox: Codeunit "DropBox";
                         Ventana: Page "Dialogo Dropbox";
                         Carpeta: Text;
+                        Tipo: Text;
+                        Accion: Option " ","Seleccionar","Anterior","Descargar Archivo","Mover","Seleccionar Destino","Crear Carpeta",Borrar,"Subir Archivo",Base64;
                     begin
                         Ventana.SetTexto('Nombre Carpeta');
                         Ventana.RunModal();
                         Ventana.GetTexto(Carpeta);
-                        DorpBox.ListFolder(Carpeta, true);
+                        Carpeta := DorpBox.ListFolder(Carpeta, Accion, Tipo, true);
                     end;
                 }
-                action("Subir Arcivo")
-                {
-                    ApplicationArea = All;
-                    Image = Save;
-                    Caption = 'Subir Archivo';
-                    ToolTip = 'Subir archivo a una carpeta en DropBox';
-                    trigger OnAction()
-                    var
-                        DorpBox: Codeunit "DropBox";
-                        Ventana: Page "Dialogo Dropbox";
-                        Carpeta: Text;
-                        Base64Txt: Text;
-                        NVInStream: InStream;
-                        Base64: Codeunit "Base64 convert";
-                        Filename: Text;
-                    begin
-                        Ventana.SetTexto('Nombre Carpeta Destino');
-                        Ventana.RunModal();
-                        Ventana.GetTexto(Carpeta);
-                        UPLOADINTOSTREAM('Import', '', ' All Files (*.*)|*.*', Filename, NVInStream);
-                        //Base64Txt := Base64.ToBase64(NVInStream);
-                        DorpBox.UploadFileB64(Carpeta, NVInStream, Filename);
-                    end;
-                }
+                // action("Subir Arcivo")
+                // {
+                //     ApplicationArea = All;
+                //     Image = Save;
+                //     Caption = 'Subir Archivo';
+                //     ToolTip = 'Subir archivo a una carpeta en DropBox';
+                //     trigger OnAction()
+                //     var
+                //         DorpBox: Codeunit "DropBox";
+                //         Ventana: Page "Dialogo Dropbox";
+                //         Carpeta: Text;
+                //         Base64Txt: Text;
+                //         NVInStream: InStream;
+                //         Base64: Codeunit "Base64 convert";
+                //         Filename: Text;
+                //     begin
+                //         Ventana.SetTexto('Nombre Carpeta Destino');
+                //         Ventana.RunModal();
+                //         Ventana.GetTexto(Carpeta);
+                //         UPLOADINTOSTREAM('Import', '', ' All Files (*.*)|*.*', Filename, NVInStream);
+                //         //Base64Txt := Base64.ToBase64(NVInStream);
+                //         DorpBox.UploadFileB64(Carpeta, NVInStream, Filename);
+                //     end;
+                // }
                 action("Miembros Carpeta")
                 {
                     ApplicationArea = All;

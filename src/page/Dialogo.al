@@ -174,6 +174,11 @@ page 7001214 "Dialogo Dropbox"
         VerValor1 := false;
     end;
 
+    procedure SetTextValue(Texto: Text)
+    begin
+        TextValue := Texto;
+    end;
+
     /// <summary>
     /// GetCodes.
     /// </summary>

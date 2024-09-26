@@ -6,9 +6,11 @@ Codeunit 7001136 Dropbox
     var
         get_metadata: Label '2/files/get_metadata';
         create_folder: Label '2/files/create_folder_v2';
+        move_folder: Label '2/files/move_v2';
         sharefolder: Label '2/sharing/share_folder';
         list_folfer_members: Label '/2/sharing/list_folder_members';
         list_folder: Label '2/files/list_folder';
+        list_folder_continue: Label '2/files/list_folder/continue';
         delete: Label '2/files/delete_v2';
         grant_type_authorization_code: Label 'authorization_code';
         grant_type_refresh_token: Label 'refresh_token';
@@ -26,6 +28,10 @@ Codeunit 7001136 Dropbox
         JsonProperties: JsonObject;
         JnodevsignToken: JsonToken;
         Base64Txt: Text;
+        origen: Text;
+        root: Text;
+        origenfinal: Text;
+        tipofinal: Text;
 
 
     trigger OnRun()
@@ -50,7 +56,7 @@ Codeunit 7001136 Dropbox
     begin
         //-default-/public/authentication/versions/1/tickets
         // This code gets the ticket from Dropbox
-
+        CompanyInfo.ChangeCompany('Malla Publicidad');
         CompanyInfo.GET();
         if CompanyInfo."Fecha Expiracion Token Dropbox" < CurrentDateTime then
             RefreshToken();
@@ -59,9 +65,9 @@ Codeunit 7001136 Dropbox
         exit(CompanyInfo.GetTokenDropbox());
     end;
 
-    procedure ListFolder(Carpeta: Text; BajarFichero: Boolean): Text
+    procedure Carpetas(Carpeta: Text; Var Files: Record "Name/Value Buffer" temporary)
     var
-        Dropbox: Codeunit Dropbox;
+        CompanyInfo: Record "Company Information";
         Ticket: Text;
         RequestType: Option Get,patch,put,post,delete;
         Inf: Record "Company Information";
@@ -70,19 +76,19 @@ Codeunit 7001136 Dropbox
         Body: JsonObject;
         StatusInfo: JsonObject;
         Respuesta: Text;
+        Dropbox: Codeunit Dropbox;
         JTokO: JsonToken;
         JTok: JsonToken;
         JEntries: JsonArray;
         JEntry: JsonObject;
         JEntryToken: JsonToken;
         JEntryTokens: JsonToken;
-        Id: Text;
         tag: Text;
-        Files: Record "Name/Value Buffer" temporary;
-        PFiles: Page "Name/Value Lookup";
-        UltimaBarra: Text;
-        barra: Integer;
+        Cursor: Text;
+        HasMore: Boolean;
+        a: Integer;
     begin
+        Files.DeleteAll();
         //https://api.dropboxapi.com/2/files/list_folder_v2
         Ticket := Dropbox.Token();
         Inf.Get;
@@ -96,17 +102,110 @@ Codeunit 7001136 Dropbox
         //     "path": "",
         //     "recursive": false
         // }
+        Clear(Body);
         Body.add('include_deleted', false);
         Body.add('include_has_explicit_shared_members', false);
         Body.add('include_media_info', false);
         Body.add('include_mounted_folders', true);
         Body.add('include_non_downloadable_files', true);
-        Body.add('path', '/' + Carpeta);
+        if Carpeta <> '' then
+            Body.add('path', '/' + Carpeta)
+        else
+            Body.add('path', '');
         Body.add('recursive', false);
         Body.WriteTo(Json);
         Respuesta := RestApiToken(Url, Ticket, RequestType::post, Json);
         StatusInfo.ReadFrom(Respuesta);
         StatusInfo.WriteTo(Json);
+        If StatusInfo.Get('entries', JTok) Then begin
+            JEntries := JTok.AsArray();
+            foreach JEntryTokens in JEntries do begin
+                JEntry := JEntryTokens.AsObject();
+                If JEntry.Get('.tag', JEntryToken) Then begin
+                    tag := JEntryToken.AsValue().AsText();
+                end;
+                // end;
+                if JEntry.Get('name', JEntryToken) then begin
+                    if tag = 'folder' then begin
+                        Files.Init();
+                        a += 1;
+                        Files.ID := a;
+                        Files.Name := JEntryToken.AsValue().AsText();
+                        Files.Value := 'Carpeta';
+                        Files.Insert();
+                    end else begin
+                        Files.Init();
+                        a += 1;
+                        Files.ID := a;
+                        Files.Name := JEntryToken.AsValue().AsText();
+                        Files.Value := '';
+                        Files.Insert();
+                    end;
+
+                end;
+            end;
+        end;
+        if StatusInfo.Get('cursor', JTok) then begin
+            Cursor := JTok.AsValue().AsText();
+        end;
+        if StatusInfo.Get('has_more', JTok) then begin
+            hasmore := JTok.AsValue().AsBoolean();
+        end;
+        If hasmore then
+            repeat
+                Clear(Body);
+                Body.add('cursor', Cursor);
+                Body.WriteTo(Json);
+                Url := Inf."Url Api DropBox" + list_folder_continue;
+                Respuesta := RestApiToken(Url, Ticket, RequestType::post, Json);
+                Clear(StatusInfo);
+                StatusInfo.ReadFrom(Respuesta);
+                StatusInfo.WriteTo(Json);
+                //"entries": [
+                // {
+                //     ".tag": "folder",
+                //     "name": "prueba",
+                //     "path_lower": "/prueba",
+                //     "path_display": "/prueba",
+                //     "id": "id:W1FIDMoXTbgAAAAAAAAACA"
+                // },
+                //recuperar entries
+                If StatusInfo.Get('entries', JTok) Then begin
+                    JEntries := JTok.AsArray();
+                    foreach JEntryTokens in JEntries do begin
+                        JEntry := JEntryTokens.AsObject();
+                        If JEntry.Get('.tag', JEntryToken) Then begin
+                            tag := JEntryToken.AsValue().AsText();
+                        end;
+                        // end;
+                        if JEntry.Get('name', JEntryToken) then begin
+
+                            if tag = 'folder' then begin
+                                Files.Init();
+                                a += 1;
+                                Files.ID := a;
+                                Files.Name := JEntryToken.AsValue().AsText();
+                                Files.Value := 'Carpeta';
+                                Files.Insert();
+                            end else begin
+                                Files.Init();
+                                a += 1;
+                                Files.ID := a;
+                                Files.Name := JEntryToken.AsValue().AsText();
+                                Files.Value := '';
+                                Files.Insert();
+                            end;
+                        end;
+                    end;
+                end;
+                if StatusInfo.Get('cursor', JTok) then begin
+                    Cursor := JTok.AsValue().AsText();
+                end;
+                if StatusInfo.Get('has_more', JTok) then begin
+                    hasmore := JTok.AsValue().AsBoolean();
+                end;
+
+            until hasmore = false;
         //"entries": [
         // {
         //     ".tag": "folder",
@@ -128,55 +227,170 @@ Codeunit 7001136 Dropbox
         //     "path_lower": "/navision",
         //     "path_display": "/Navision",
         //     "id": "id:W1FIDMoXTbgAAAAAAAAAJg"
-        // },
-        //recuperar entries
-        If StatusInfo.Get('entries', JTok) Then begin
-            JEntries := JTok.AsArray();
-            foreach JEntryTokens in JEntries do begin
-                JEntry := JEntryTokens.AsObject();
-                If JEntry.Get('.tag', JEntryToken) Then begin
-                    tag := JEntryToken.AsValue().AsText();
-                end;
-                // end;
-                if JEntry.Get('name', JEntryToken) then begin
-                    if tag = 'folder' then
-                        PFiles.AddItem(JEntryToken.AsValue().AsText(), 'Carpeta')
-                    else
-                        PFiles.AddItem(JEntryToken.AsValue().AsText(), '');
-                end;
-            end;
+        // },  
+    end;
+
+    procedure ListFolder(
+        Carpeta: Text; Accion: Option " ","Seleccionar","Anterior","Descargar Archivo","Mover","Crear Carpeta",Borrar,"Subir Archivo",Base64;
+        Var Tipo: Text; Continuar: Boolean): Text
+    var
+        Dropbox: Codeunit Dropbox;
+
+        Id: Text;
+        tag: Text;
+        Files: Record "Name/Value Buffer" temporary;
+        PFiles: Page "Name/Value Lookup";
+        UltimaBarra: Text;
+        barra: Integer;
+        Ventana: Page "Dialogo Dropbox";
+        CarpetaDestino: Text;
+        Cursor: Text;
+        hasmore: Boolean;
+        NVInStream: Instream;
+        Filename: Text;
+        Destino: Text;
+        StatusInfo: JsonObject;
+    begin
+        if root = '' then
+            root := Carpeta;
+        Carpetas(Carpeta, Files);
+        if Files.FindFirst() then begin
+            PFiles.AddItem('..', 'Carpeta');
+            repeat
+                PFiles.AddItem(Files.Name, Files.Value);
+            until Files.Next() = 0;
         end;
         Commit();
-        PFiles.Navegar();
+        PFiles.Navegar(root);
+        if Accion = Accion::Mover then begin
+            PFiles.Mover();
+        end;
         If PFiles.RunModal() in [Action::LookupOk, Action::OK] then begin
             Files.Init();
-            PFiles.GetNombre(Files.Name, Files.Value);
-            If Files.Value = 'Carpeta' then begin
-                //Carpeta/Subcarpeta/Archivo
-                //Volver a la carpeta antertior
-                If Files.Name = 'Anterior' then begin
-                    Files.Name := '';
-                    If StrPos(Carpeta, '/') > 0 then begin
-                        repeat
-                            Barra += 1;
+            PFiles.GetNombre(Files.Name, Files.Value, Accion);
+            if Files.Name = '-' then
+                exit('-');
+            tipo := Files.Value;
+            if StrLen(root) = 0 then
+                root := '/'
+            else if Copystr(root, 1, 1) <> '/' then
+                root := '/' + root;
+            Case Files.Value Of
+                'Carpeta':
+                    begin
+                        //Carpeta/Subcarpeta/Archivo
+                        //Volver a la carpeta antertior
+                        Case Accion Of
+                            Accion::Seleccionar:
+                                exit(Copystr(root, 2) + '/' + Files.Name);
+                            Accion::"Crear Carpeta":
+                                begin
+                                    if not Continuar then
+                                        exit(CreateFolder(Copystr(root, 2) + '/' + Files.Name))
+                                    else
+                                        CreateFolder(Copystr(root, 2) + '/' + Files.Name);
+                                    exit(ListFolder(Copystr(root, 2), Accion, tipo, Continuar));
 
-                            UltimaBarra := CopyStr(Carpeta, barra);
+                                end;
+                            Accion::Borrar:
+                                begin
+                                    if not continuar then
+                                        exit(DeleteFolder(Copystr(root, 2) + '/' + Files.Name, false))
+                                    else
+                                        DeleteFolder(Copystr(root, 2) + '/' + Files.Name, false);
+                                    exit(ListFolder(Copystr(root, 2), Accion, tipo, Continuar));
+                                end;
+                            Accion::"Subir Archivo":
+                                begin
+                                    // Ventana.SetTexto('Nombre Archivo');
+                                    // Ventana.RunModal();
+                                    // Ventana.GetTexto(Filename);
+                                    UPLOADINTOSTREAM('Import', '', ' All Files (*.*)|*.*', Filename, NVInStream);
+                                    If not Continuar then
+                                        exit(UploadFileB64(Copystr(root, 2), NVInStream, Filename))
+                                    else
+                                        UploadFileB64(Copystr(root, 2), NVInStream, Filename);
+                                    exit(ListFolder(Copystr(root, 2), Accion, tipo, Continuar));
+                                end;
+                            Accion::Mover:
+                                begin
+                                    destino := Dropbox.ListFolder(Copystr(root, 2), Accion::Mover, tipo, false);
+                                    if destino = '-' then
+                                        error('no ha elegido destino');
+                                    if not Continuar then
+                                        exit(MoveFolder(CopyStr(root, 2) + '/' + Files.Name, Destino));
+                                    MoveFolder(CopyStr(root, 2) + '/' + Files.Name, destino + '/' + Files.Name);
+                                    Accion := Accion::" ";
+                                    Clear(Dropbox);
+                                    exit(ListFolder(Destino, Accion, tipo, Continuar));
+                                end;
+                        end;
+                        If Files.Name = 'Anterior' then begin
+                            Files.Name := '';
+                            root := Files.Name;
+                            If StrPos(Carpeta, '/') > 0 then begin
+                                repeat
+                                    Barra += 1;
 
-                        until StrPos(UltimaBarra, '/') = 0;
-                        Files.Name := CopyStr(Carpeta, 1, barra - 2);
-                        DropBox.ListFolder(Files.Name, BajarFichero);
+                                    UltimaBarra := CopyStr(Carpeta, barra);
+
+                                until StrPos(UltimaBarra, '/') = 0;
+                                Files.Name := CopyStr(Carpeta, 1, barra - 2);
+                            end;
+                            root := Files.Name;
+                            exit(ListFolder(Files.Name, Accion, tipo, Continuar));
+
+                        end else
+                            if root = '/' then
+                                root += Files.Name
+                            else
+                                root += '/' + Files.Name;
+
+                        exit(ListFolder(Carpeta + '/' + Files.Name, Accion, tipo, Continuar));
                     end;
-                end else
-                    DropBox.ListFolder(Carpeta + '/' + Files.Name, BajarFichero);
-            end else begin
-                exit(DowloadFileB64(Carpeta, Base64Txt, Files.Name, BajarFichero));
+                else begin
+                    Case Accion Of
+                        Accion::Mover:
+                            begin
+                                destino := Dropbox.ListFolder(Copystr(root, 2), Accion::Mover, tipo, false);
+                                if destino = '-' then
+                                    error('no ha elegido destino');
+                                if not Continuar then
+                                    exit(Movefile(Copystr(root, 2), Destino, Files.Name));
+                                Movefile(Copystr(root, 2), Destino, Files.Name);
+                                Clear(Dropbox);
+                                Accion := Accion::" ";
+                                root := Destino;
+                                exit(ListFolder(Destino, Accion, tipo, Continuar));
+                                //exit(MoveFile(Carpeta + '/', CarpetaDestino, Files.Name));
+                            end;
+                        Accion::Borrar:
+                            begin
+                                if not continuar then
+                                    exit(DeleteFolder(Copystr(root, 2) + '/' + Files.Name, false))
+                                else
+                                    DeleteFolder(Copystr(root, 2) + '/' + Files.Name, false);
+                                exit(ListFolder(Copystr(root, 2), Accion, tipo, Continuar));
+                            end;
+                        Accion::Seleccionar:
+                            exit(Copystr(root, 2) + '/' + Files.Name);
+                        Accion::"Descargar Archivo":
+                            begin
+                                if not continuar then
+                                    exit(DowloadFileB64(Copystr(root, 2), Base64Txt, Files.Name, Accion = accion::"Descargar Archivo"))
+                                else
+                                    DowloadFileB64(Copystr(root, 2), Base64Txt, Files.Name, Accion = accion::"Descargar Archivo");
+                                exit(ListFolder(Copystr(root, 2), Accion, tipo, Continuar));
+                            end;
+                    end;
+                end;
             end;
-
 
         end;
 
 
     end;
+
 
 
     procedure CreateFolder(Carpeta: Text): Text
@@ -219,7 +433,15 @@ Codeunit 7001136 Dropbox
                 Id := JnodeEntryToken.AsValue().AsText();
             end;
         end;
-        exit(CreateFolderShared(Carpeta));
+        if strpos(Id, 'id') = 0 then begin
+            if StatusInfo.Get('error_summary', JTokO) then begin
+                Error(JTokO.AsValue().AsText());
+            end;
+            Error('Error al crear la carpeta');
+        end;
+        exit(Id);
+
+        //exit(CreateFolderShared(Carpeta));
 
     end;
     // {
@@ -277,8 +499,8 @@ Codeunit 7001136 Dropbox
 
     end;
 
-
-    procedure DeleteFolder(Carpeta: Text): Text
+    //Move folder
+    procedure MoveFolder(Carpeta: Text; NuevaCarpeta: Text): Text
     var
         Dropbox: Codeunit Dropbox;
         Ticket: Text;
@@ -293,8 +515,107 @@ Codeunit 7001136 Dropbox
         JTok: JsonToken;
         Id: Text;
     begin
+        // exit('');
+        //https://api.dropboxapi.com/2/files/move_v2
+        Ticket := Dropbox.Token();
+        Inf.Get;
+        Url := Inf."Url Api DropBox" + move_folder;
+        Body.add('from_path', '/' + Carpeta);
+        Body.add('to_path', '/' + NuevaCarpeta);
+        Body.add('allow_shared_folder', true);
+        Body.add('autorename', false);
+        Body.WriteTo(Json);
+        Respuesta := RestApiToken(Url, Ticket, RequestType::post, Json);
+        StatusInfo.ReadFrom(Respuesta);
+        StatusInfo.WriteTo(Json);
+        //{
+        // "metadata": {
+        //     "name": "math",
+        //     "path_lower": "/homework/math",
+        //     "path_display": "/Homework/math",
+        //     "id": "id:W1FIDMoXTbgAAAAAAAAACQ"
+        // }
+        //}
+        //recuperar id
+        If StatusInfo.Get('metadata', JTokO) Then begin
+            JsonEntry := JTokO.AsObject();
+            If JsonEntry.Get('id', JnodeEntryToken) Then begin
+                Id := JnodeEntryToken.AsValue().AsText();
+            end;
+        end;
+        DeleteFolder(Carpeta, true);
+        exit(id);
+
+    end;
+    //move_file
+    procedure MoveFile(Carpeta: Text; NuevaCarpeta: Text; Archivo: Text): Text
+    var
+        Dropbox: Codeunit Dropbox;
+        Ticket: Text;
+        RequestType: Option Get,patch,put,post,delete;
+        Inf: Record "Company Information";
+        Url: Text;
+        Json: Text;
+        Body: JsonObject;
+        StatusInfo: JsonObject;
+        Respuesta: Text;
+        JTokO: JsonToken;
+        JTok: JsonToken;
+        Id: Text;
+    begin
+        //https://api.dropboxapi.com/2/files/move_v2
+        Ticket := Dropbox.Token();
+        Inf.Get;
+        Url := Inf."Url Api DropBox" + move_folder;
+        Body.add('from_path', '/' + Carpeta + '/' + Archivo);
+        Body.add('to_path', '/' + NuevaCarpeta + '/' + Archivo);
+        Body.add('allow_shared_folder', true);
+        Body.add('autorename', false);
+        Body.WriteTo(Json);
+        Respuesta := RestApiToken(Url, Ticket, RequestType::post, Json);
+        StatusInfo.ReadFrom(Respuesta);
+        StatusInfo.WriteTo(Json);
+        //{
+        // "metadata": {
+        //     "name": "math",
+        //     "path_lower": "/homework/math",
+        //     "path_display": "/Homework/math",
+        //     "id": "id:W1FIDMoXTbgAAAAAAAAACQ"
+        // }
+        //}
+        //recuperar id
+        If StatusInfo.Get('metadata', JTokO) Then begin
+            JsonEntry := JTokO.AsObject();
+            If JsonEntry.Get('id', JnodeEntryToken) Then begin
+                Id := JnodeEntryToken.AsValue().AsText();
+            end;
+        end;
+        exit(id);
+
+    end;
+
+    procedure DeleteFolder(Carpeta: Text; HideDialog: Boolean): Text
+    var
+        Dropbox: Codeunit Dropbox;
+        Ticket: Text;
+        RequestType: Option Get,patch,put,post,delete;
+        Inf: Record "Company Information";
+        Url: Text;
+        Json: Text;
+        Body: JsonObject;
+        StatusInfo: JsonObject;
+        Respuesta: Text;
+        JTokO: JsonToken;
+        JTok: JsonToken;
+        Id: Text;
+    begin
+        If Not HideDialog Then
+            If Not Confirm('¿Está seguro de que desea eliminar la carpeta?', true) Then
+                exit('');
         //https://api.dropboxapi.com/2/files/create_folder_v2
         Ticket := Dropbox.Token();
+        if CopyStr(Carpeta, 1, 1) = '/' then
+            Carpeta := CopyStr(Carpeta, 2);
         Inf.Get;
         Url := Inf."Url Api DropBox" + delete;
         Body.add('path', '/' + Carpeta);
@@ -516,7 +837,7 @@ Codeunit 7001136 Dropbox
     begin
         //-default-/public/authentication/versions/1/tickets
         // This code gets the ticket from Dropbox
-
+        Inf.ChangeCompany('Malla Publicidad');
         Inf.Get;
         Url := Inf."Url Api DropBox" + oauth2_token + '?refresh_token=' + Inf."Refresh Token" + '&grant_type=refresh_token';
         Respuesta := RestApi(Url, RequestType::post, '', Inf."Api Key", Inf."Api Secret");
@@ -641,7 +962,7 @@ Codeunit 7001136 Dropbox
     end;
 
 
-    procedure DowloadFileB64(Carpeta: Text; Base64Data: Text; Filename: Text; BajarFichero: Boolean): Text
+    procedure DowloadFileB64(Carpeta: Text; var Base64Data: Text; Filename: Text; BajarFichero: Boolean): Text
     var
         Inf: Record "Company Information";
         RequestType: Option Get,patch,put,post,;
@@ -674,7 +995,10 @@ Codeunit 7001136 Dropbox
         // {
         //     "path": "/Matrices.png",
         //}
-        Body.Add('path', '/' + Carpeta + '/' + FileName);
+        if Carpeta <> '' then
+            Body.Add('path', '/' + Carpeta + '/' + FileName)
+        else
+            Body.Add('path', '/' + FileName);
         Body.WriteTo(Json);
         Respuesta := RestApiToken(Url, Ticket, RequestType::post, Json);
         StatusInfo.ReadFrom(Respuesta);
