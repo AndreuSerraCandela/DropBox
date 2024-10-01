@@ -5,18 +5,18 @@
             "type": "al",
             "request": "launch",
             "name": "Your own server",
-            "server": "http://localhost:8080/BC240",
-            "serverInstance": "BC240",
-            "authentication": "Windows",
+            "server": "http://192.168.10.226:8080/POWERBI",
+            "serverInstance": "POWERBI",
+            "authentication": "UserPassword",
             "tenant": "default",
             "environmentType": "OnPrem",
-            "schemaUpdateMode": "ForceSync",
+            "schemaUpdateMode": "Synchronize",
             "breakOnError": true,
             "launchBrowser": true,
             "enableLongRunningSqlStatements": true,
             "enableSqlInformationDebugger": true,
-            "port": 7049,
-            "debugServer": 7049
+            "port": 49049,
+            "debugServer": 49049
         }
     ]
 }
