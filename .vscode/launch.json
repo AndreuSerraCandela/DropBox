@@ -35,5 +35,23 @@
             "port": 7049,
             "debugServer": 7049
         }
+        ,
+        {
+            "type": "al",
+            "request": "launch",
+            "name": "local",
+            "server": "http://localhost:8080/BC270",
+            "serverInstance": "BC270",
+            "authentication": "Windows",
+            "tenant": "default",
+            "environmentType": "OnPrem",
+            "schemaUpdateMode": "Synchronize",
+            "breakOnError": true,
+            "launchBrowser": true,
+            "enableLongRunningSqlStatements": true,
+            "enableSqlInformationDebugger": true,
+            "port": 8049,
+            "debugServer": 8049
+        }
     ]
 }
